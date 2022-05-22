@@ -75,12 +75,6 @@ public class SignUpTest {
        Assert.assertEquals(password2.getText(),"The Password field is required.");
        Assert.assertEquals(firstname.getText(),"The First name field is required.");
        Assert.assertEquals(lastname.getText(),"The Last Name field is required.");
-
-
-//        WebElement heading = driver.findElement(By.xpath("//h3[@class='RTL']"));
-//        Assert.assertTrue(heading.getText().contains(lastName));
-//        Assert.assertTrue(heading.getText().contains(firstName));
-//        Assert.assertEquals(heading.getText(),"Hi, Jan Kowalski");
     }
     @Test
     public void signUpEmptyForce() {
@@ -108,7 +102,6 @@ public class SignUpTest {
                 .map(WebElement::getText)
                 .collect(Collectors.toList());
 
-
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(errors.contains("The Email field is required."));
         softAssert.assertTrue(errors.contains("The Password field is required."));
@@ -116,14 +109,44 @@ public class SignUpTest {
         softAssert.assertTrue(errors.contains("The First name field is required."));
         softAssert.assertTrue(errors.contains("The Last Name field is required."));
         softAssert.assertAll();
+    }
+    @Test
+    public void signUpInvalidEmial() {
+        WebDriverManager.chromedriver().setup();
+        WebDriver driver = new ChromeDriver();
+        driver.manage().timeouts().implicitlyWait(10L, TimeUnit.SECONDS);
+        driver.manage().window().maximize();
+        driver.get("http://www.kurs-selenium.pl/demo/");
 
 
-        //Assert.assertEquals("The Email field is required.","The Email field is required.");
-        //Assert.assertEquals("The Password field is required.","The Password field is required.");
-        //Assert.assertEquals("The Password field is required.","The Password field is required.");
-        //Assert.assertEquals("The First name field is required.","The First name field is required.");
-        //Assert.assertEquals("The Last Name field is required.","The Last Name field is required.");
+        String firstName = "Jan";
+        String lastName = "Kowalski";
+        int randomNumber = (int) (Math.random()*1000);
+        String email = "jankowalski" + randomNumber;
+        driver.findElements(By.xpath("//li[@id='li_myaccount']"))
+                .stream()
+                .filter(WebElement::isDisplayed)
+                .findFirst()
+                .ifPresent(WebElement::click);
+        driver.findElements(By.xpath("//a[text()= '  Sign Up']")).get(1).click();
+        //System.out.println(driver.findElement(By.xpath("//input[@name='firstname']")));
+        driver.findElement(By.name("firstname")).sendKeys(firstName);
+        driver.findElement(By.name("lastname")).sendKeys(lastName);
+        driver.findElement(By.name("phone")).sendKeys("1111111");
+        driver.findElement(By.name("email")).sendKeys(email);
+        driver.findElement(By.name("password")).sendKeys("Test123");
+        driver.findElement(By.name("confirmpassword")).sendKeys("Test123");
+        driver.findElement(By.xpath("//button[@type='submit' and text()=' Sign Up']")).click();
+
+
+        List<String> errors = driver.findElements(By.xpath("//div[@class='alert alert-danger']//p"))
+                .stream()
+                .map(WebElement::getText)
+                .collect(Collectors.toList());
+        Assert.assertTrue(errors.contains("The Email field must contain a valid email address."));
+
 
     }
+
 }
 
