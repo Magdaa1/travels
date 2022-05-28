@@ -1,18 +1,27 @@
 package pl.seleniumdemo.pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.Test;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class HotelSearchPage {
+        WebDriver driver;
+
         @FindBy(xpath = "//span[text()='Search by Hotel or City Name']")
+        //@FindBy(xpath="//div[@id='s2id_autogen8']")
         private WebElement searchHotelSpan;
 
-        @FindBy(xpath = "//div[@id='select2-drop']//input[1]")
+        @FindBy(xpath = "//div[@id='select2-drop']//input")
         private WebElement searchHotelInput;
 
         @FindBy(xpath = "//span[@class='select2-match' and text()='Dubai']")
@@ -22,7 +31,7 @@ public class HotelSearchPage {
         private WebElement checkInput;
 
         @FindBy(name = "checkout")
-        private WebElement checkOut;
+        private WebElement checkOutInput;
 
         @FindBy(id = "travellersInput")
         private WebElement travellersInput;
@@ -33,8 +42,12 @@ public class HotelSearchPage {
         @FindBy(id = "childPlusBtn")
         private WebElement childPlusBtn;
 
-        @FindBy(xpath = "//button[@class='btn btn-lg btn-block btn-primary pfb0 loader' and text()=' Search']")
-        private WebElement buttonSearch;
+        @FindBy(xpath = "//button[text()=' Search']")
+        private WebElement seatchButton;
+
+        public HotelSearchPage(WebDriver driver){
+                PageFactory.initElements(driver,this);
+        }
 
         public void setCity(String cityName) {
         searchHotelSpan.click();
@@ -44,30 +57,21 @@ public class HotelSearchPage {
 
         public void setDates(String checkin, String checkout) {
             checkInput.sendKeys(checkin);
-            checkOut.sendKeys(checkout);
+            checkOutInput.sendKeys(checkout);
         }
 
-        public void 
-        driver.findElement(By.xpath()).click();
-        driver.findElement(By.xpath()).sendKeys("Dubai");
-        driver.findElement(By.xpath()).click();
-        //driver.findElement(By.xpath("//input[@class='form input-lg dpd1']")).sendKeys("17/04/2021");
-        driver.findElement(By.name()).sendKeys("17/04/2021");
-        // driver.findElement(By.name("checkout")).sendKeys("20/04/2021");
-        driver.findElement(By.name()).click();
-        driver.findElements(By.xpath("//td[@class='day ' and text()='30']"))
-                .stream()
-                .filter(WebElement::isDisplayed)
-                .findFirst()
-                .ifPresent(WebElement::click);
-        driver.findElement(By.id()).click();
-        driver.findElement(By.id()).click();
-        driver.findElement(By.id()).click();
-        driver.findElement(By.xpath()).click();
-        List<String> hotelNames = driver.findElements(By.xpath("//h4[contains(@class,'list_title')]//b"))
-                .stream()
-                .map(element -> element.getAttribute("textContent"))
-                .collect(Collectors.toList());
+        public void setTravellers(int adultsToAdd, int childToAdd) {
+        travellersInput.click();
+        for (int i=0; i < adultsToAdd; i++){
+                adultPlusBtn.click();
+        }
+        for (int i=0; i < childToAdd; i++){
+                childPlusBtn.click();
+        }
+        }
 
+        public void performSearch() {
+        seatchButton.click();
+        }
     }
-}
+
