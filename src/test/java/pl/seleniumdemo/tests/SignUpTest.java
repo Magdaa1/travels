@@ -6,7 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
-import pl.seleniumdemo.model.User;
+
 import pl.seleniumdemo.pages.HotelSearchPage;
 import pl.seleniumdemo.pages.LoggedUserPage;
 import pl.seleniumdemo.pages.SignUpPage;
@@ -45,7 +45,7 @@ public class SignUpTest extends BasicTest {
         Assert.assertTrue(loggedUserPage.getHeadingText().contains(firstName));
         Assert.assertEquals(loggedUserPage.getHeadingText(), "Hi, Jan Kowalski");
     }
-    
+
 
     @Test
     public void signUpTestWithoutDataTest() {
