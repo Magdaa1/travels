@@ -5,7 +5,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import pl.seleniumdemo.model.User;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,27 +35,49 @@ public class SignUpPage {
     @FindBy(xpath = "//div[@class='alert alert-danger']//p")
     private List<WebElement> alert;
 
-    public void setFirstName(String firstName){
+    private WebDriver driver;
+
+    public SignUpPage (WebDriver driver){
+
+        PageFactory.initElements(driver, this);
+        this.driver = driver;
+    }
+
+    public SignUpPage setFirstName(String firstName){
+
         firstNameInput.sendKeys(firstName);
+        return this;
     }
-    public void setLastName(String lastName){
+    public SignUpPage setLastName(String lastName){
+
         lastNameInput.sendKeys(lastName);
+        return this;
     }
-    public void setPhone(String phone){
+    public SignUpPage setPhone(String phone){
+
         phoneInput.sendKeys(phone);
+        return this;
     }
-    public void setEmail(String email){
+    public SignUpPage setEmail(String email){
         emailInput.sendKeys(email);
+        return this;
     }
-    public void setPassword(String password){
+    public SignUpPage setPassword(String password){
+
         passwordInput.sendKeys(password);
+        return this;
     }
-    public void confirmPassword(String password){
+    public SignUpPage confirmPassword(String password){
         confirmpasswordInput.sendKeys(password);
+        return this;
     }
-    public void signUp(){
+    public LoggedUserPage signUp(){
+
         signUpButton.click();
+        return new LoggedUserPage(driver);
     }
+
+
 
     public List<String> getAlert() {
         return alert
@@ -65,28 +86,5 @@ public class SignUpPage {
                 .collect(Collectors.toList());
     }
 
-    public SignUpPage (WebDriver driver){
-        PageFactory.initElements(driver, this);
-    }
-
-    public void fillSignUpForm(String firstName, String lastName, String phone, String email, String password){
-        firstNameInput.sendKeys(firstName);
-        lastNameInput.sendKeys(lastName);
-        phoneInput.sendKeys(phone);
-        emailInput.sendKeys(email);
-        passwordInput.sendKeys(password);
-        confirmpasswordInput.sendKeys(password);
-        signUpButton.click();
-    }
-
-    public void fillSignUpForm(User user){
-        firstNameInput.sendKeys(user.getFirstName());
-        lastNameInput.sendKeys(user.getLastName());
-        phoneInput.sendKeys(user.getPhone());
-        emailInput.sendKeys(user.getEmail());
-        passwordInput.sendKeys( user.getPassword());
-        confirmpasswordInput.sendKeys(user.getPassword());
-        signUpButton.click();
-    }
 }
 
