@@ -14,18 +14,20 @@ public class ResultsPage {
     private List<WebElement> hotelList;
 
     @FindBy(xpath = "//h2[contains(text(),'No Results Found')]")
-    public  WebElement resultHeading;
+    public WebElement resultHeading;
 
-    public ResultsPage(WebDriver driver){
-        PageFactory.initElements(driver,this);
+    public ResultsPage(WebDriver driver) {
+        PageFactory.initElements(driver, this);
     }
-    public List<String> getHotelNames(){
-       return hotelList.stream()
+
+    public List<String> getHotelNames() {
+        return hotelList.stream()
                 .map(el -> el.getAttribute("textContent"))
                 .collect(Collectors.toList());
 
     }
-    public String getHeadingText(){
+
+    public String getHeadingText() {
         return resultHeading.getText();
     }
 }
