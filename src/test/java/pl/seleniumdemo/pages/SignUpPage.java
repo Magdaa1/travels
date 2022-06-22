@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import pl.seleniumdemo.utils.SeleniumHelper;
 
 
 import java.util.List;
@@ -36,6 +37,8 @@ public class SignUpPage {
     @FindBy(xpath = "//div[@class='alert alert-danger']//p")
     private List<WebElement> alert;
 
+    public WebDriver driver;
+
     public void setFirstName(String firstName) {
         firstNameInput.sendKeys(firstName);
     }
@@ -65,6 +68,7 @@ public class SignUpPage {
     }
 
     public List<String> getAlert() {
+        SeleniumHelper.waitForNotEmptyList(driver,By.xpath("//div[@class='alert alert-danger']//p"));
         return alert
                 .stream()
                 .map(WebElement::getText)
@@ -73,6 +77,7 @@ public class SignUpPage {
 
     public SignUpPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
+        this.driver = driver;
     }
 
 }
